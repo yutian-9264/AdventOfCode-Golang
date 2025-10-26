@@ -3,11 +3,13 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"os"
+	"unicode"
 )
 
-var colLength int = 10
-var rowLength int = 10
+var colLength int = 0
+var rowLength int = 0
 var matrix [][]byte
 var foundTimes int = 0
 
@@ -22,8 +24,39 @@ func addPair(i int, j int) {
 	p = append(p, Pair{I: i, J: j})
 }
 
+func find_file_col_row(file *os.File) {
+	rows, cols := 0, 0
+	scanner := bufio.NewScanner(file)
+
+	for scanner.Scan() {
+		line := scanner.Text()
+		if rows == 0 {
+			for _, r := range line {
+				if unicode.IsLetter(r) {
+					cols++
+				}
+			}
+		}
+		rows++
+	}
+
+	colLength = cols
+	rowLength = rows
+	fmt.Println("colLength", colLength, rowLength)
+}
+
 // XMAS 88 77 65 83
 func main() {
+	file, err := os.Open("day4.txt")
+	if err != nil {
+		fmt.Println("file open failed: ", err)
+		return
+	}
+	defer file.Close()
+
+	find_file_col_row(file)
+
+	file.Seek(0, io.SeekStart)
 
 	rows, cols := colLength, rowLength
 	matrix = make([][]byte, rows)
@@ -31,12 +64,6 @@ func main() {
 		matrix[i] = make([]byte, cols)
 	}
 	//
-	file, err := os.Open("day4.txt")
-	if err != nil {
-		fmt.Println("file open failed: ", err)
-		return
-	}
-	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
 
@@ -111,7 +138,7 @@ func main() {
 
 	fmt.Println("foundTimes: ", foundTimes)
 
-	fmt.Println(matrix)
+	// fmt.Println(matrix)
 }
 
 func check(i, j int, m byte) (ifFound bool, i_found, j_found int) {
