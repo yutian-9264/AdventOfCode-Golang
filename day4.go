@@ -63,39 +63,19 @@ func main() {
 	for i := range matrix {
 		matrix[i] = make([]byte, cols)
 	}
-	//
 
 	scanner := bufio.NewScanner(file)
-
 	index_i := 0
-
-	// if scanner.Scan() {
-	// 	line := scanner.Text()
-
-	// 	for _, r := range line {
-	// 		if unicode.IsLetter(r) {
-	// 			col_count++
-	// 		}
-	// 	}
-	// }
-
-	// colLength = col_count
-
-	// file.Seek(0, 0)
 
 	for scanner.Scan() {
 		line := scanner.Text()
 		bytes := []byte(line)
 		matrix[index_i] = bytes
-		// matrix = append(matrix, []byte(bytes))
-
 		index_i++
 	}
 	if err := scanner.Err(); err != nil {
 		fmt.Println("read file failed: ", err)
 	}
-
-	// rowLength = index_i
 
 	for i := 0; i < rowLength; i++ {
 		for j := 0; j < colLength; j++ {
@@ -126,29 +106,15 @@ func main() {
 							}
 						}
 					}
-
 				}
 			}
 		}
 	}
 
-	// check(1, 2, 88)
-	// check(0, 2, 77)
-	// check(3, 0, 77)
-
 	fmt.Println("foundTimes: ", foundTimes)
-
-	// fmt.Println(matrix)
 }
 
 func check(i, j int, m byte) (ifFound bool, i_found, j_found int) {
-	// if m == 65 {
-	// 	fmt.Println("begin seach A", i, j)
-	// }
-	// var i_top, i_down, j_left, j_right int
-	// fmt.Println("check: ", i, j, m)
-	// fmt.Println("i == rowLength-1:", i == rowLength-1)
-	// fmt.Println("j == colLength-1:", j == colLength-1)
 	if i > 0 && i < rowLength-1 && j > 0 && j < colLength-1 {
 		//don't lie at four borders
 		if a, b, c := search(i, i-1, i+1, j, j-1, j+1, m); a {
@@ -158,11 +124,6 @@ func check(i, j int, m byte) (ifFound bool, i_found, j_found int) {
 		}
 
 	} else {
-		// if i == 0 {
-		// 	i_top = 0
-		// }else if i == rowLength {
-		// 	i_down =
-		// }
 
 		// lie at four corners
 		if i == 0 && j == 0 {
@@ -231,8 +192,6 @@ func search(i, i_top, i_down, j, j_left, j_right int, m byte) (isFound bool, i_f
 	fmt.Println("search_1", i, j)
 	if m != 88 && m != 77 {
 		if matrix[i][j] == m {
-			// fmt.Println(ii, jj)
-			// foundTimes++
 			return true, i, j
 		} else {
 			return false, 0, 0
@@ -247,8 +206,6 @@ func search(i, i_top, i_down, j, j_left, j_right int, m byte) (isFound bool, i_f
 			}
 			fmt.Println("search_2", i, j, ii, jj, m)
 			if matrix[ii][jj] == m && m != 77 {
-				// fmt.Println(ii, jj)
-				// foundTimes++
 				return true, ii, jj
 			}
 			if matrix[ii][jj] == m && m == 77 {
